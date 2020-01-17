@@ -1,12 +1,14 @@
 FROM debian:buster
-RUN apt-get update
-RUN apt-get upgrade -y
-RUN apt-get -y install nginx-full mariadb-server wget
-RUN apt-get install -y php php-fpm php-gd php-mysql php-cli php-curl php-json
-RUN mysql_install_db
-COPY ./srcs/php.ini ./etc/php/7.3/fpm/php.ini
-COPY ./srcs/default ./etc/nginx/sites-available/default
-COPY ./srcs/index.html /var/www/html/default
-COPY ./srcs/info.php /var/www/html/default
-CMD nginx -g 'daemon off;' && service php-fpm7.3 start && service php-fpm start && service nginx start && service mysql start && status && nginx -t
-EXPOSE 80
+RUN apt-get update && apt-get upgrade && apt-get install -y nginx vim mariadb-server mariadb-client wget
+RUN apt-get install -y php-fpm php-mysql
+RUN wget https://files.phpmyadmin.net/phpMyAdmin/4.9.0.1/phpMyAdmin-4.9.0.1-all-languages.tar.gz
+RUN tar -zxvf phpMyAdmin-4.9.0.1-all-languages.tar.gz
+RUN mv phpMyAdmin-4.9.0.1-all-languages /var/www/html/phpMyAdmin
+RUN rm phpMyAdmin-4.9.0.1-all-languages.tar.gz
+RUN chmod -R 755 /var/www/html/
+COPY ./srcs/index.html /var/www/html/index.html
+COPY ./srcs/info.php /var/www/html/info.php
+COPY ./srcs/default /etc/nginx/sites-available/localhost
+#RUN cd /tmp
+#RUN ln -s /etc/nginx/sites-available/localhost /etc/nginx/sites-enabled/localhost
+CMD nginx -g 'daemon off;' && service nginx start && service php7.3-fpm start && service mysql start
