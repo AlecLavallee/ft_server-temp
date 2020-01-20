@@ -1,6 +1,8 @@
 FROM debian:buster
-RUN apt-get update && apt-get upgrade && apt-get install -y nginx vim mariadb-server mariadb-client wget
-RUN apt-get install -y php php-fpm php-gd php-mysql php-cli php-curl php-json 
+MAINTAINER Alelaval <alelaval@student.42.fr>
+
+RUN apt-get update && apt-get upgrade && apt-get install -y nginx mariadb-server mariadb-client wget
+RUN apt-get install -y php-fpm php-mysql 
 RUN wget https://fr.wordpress.org/latest-fr_FR.tar.gz
 RUN tar -zxvf latest-fr_FR.tar.gz
 RUN mv wordpress /var/www/html/wordpress
@@ -13,14 +15,15 @@ RUN tar -zxvf phpMyAdmin-4.9.0.1-all-languages.tar.gz
 RUN mv phpMyAdmin-4.9.0.1-all-languages /var/www/html/phpMyAdmin
 RUN rm phpMyAdmin-4.9.0.1-all-languages.tar.gz
 
-ADD ./srcs/php.ini ./etc/php/7.3/fpm/php.ini
-ADD ./srcs/default ./etc/nginx/sites-available/default
-ADD ./srcs/wordpress ./etc/nginx/sites-available/wordpress
-ADD ./srcs/wp-config.php ./var/www/html/wordpress/wp-config.php
-ADD ./srcs/create_database create_database
-ADD ./srcs/init.sh init.sh
-ADD ./srcs/init_db.sh init_db.sh
-ADD ./srcs/script.sh script.sh
+COPY ./srcs/php.ini ./etc/php/7.3/fpm/php.ini
+COPY ./srcs/default ./etc/nginx/sites-available/default
+COPY ./srcs/wordpress ./etc/nginx/sites-available/wordpress
+COPY ./srcs/info.php ./var/www/html
+COPY ./srcs/wp-config.php ./var/www/html/wordpress/wp-config.php
+COPY ./srcs/create_database create_database
+COPY ./srcs/init.sh init.sh
+COPY ./srcs/init_db.sh init_db.sh
+COPY ./srcs/script.sh script.sh
 
 RUN sh init_db.sh
 
