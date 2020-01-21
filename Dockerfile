@@ -20,11 +20,13 @@ COPY ./srcs/default ./etc/nginx/sites-available/default
 COPY ./srcs/wordpress ./etc/nginx/sites-available/wordpress
 COPY ./srcs/info.php ./var/www/html
 COPY ./srcs/wp-config.php ./var/www/html/wordpress/wp-config.php
-COPY ./srcs/create_database create_database
-COPY ./srcs/init.sh init.sh
-COPY ./srcs/init_db.sh init_db.sh
-COPY ./srcs/script.sh script.sh
+COPY ./srcs/localhost.crt /etc/ssl/certs/localhost.crt
+COPY ./srcs/localhost.key /etc/ssl/private/localhost.key
+COPY ./srcs/db_wordpress db_wordpress
+COPY ./srcs/service.sh service.sh
+COPY ./srcs/db.sh db.sh
+COPY ./srcs/start.sh start.sh
 
-RUN sh init_db.sh
+RUN sh db.sh
 
-CMD ["bash", "./script.sh"]
+CMD ["bash", "./start.sh"]
