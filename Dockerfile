@@ -1,7 +1,7 @@
 FROM debian:buster
 LABEL maintainer Alelaval <alelaval@student.42.fr>
 
-RUN apt-get update && apt-get upgrade && apt-get install -y nginx mariadb-server mariadb-client wget
+RUN apt-get update -y && apt-get upgrade -y && apt-get install -y nginx mariadb-server mariadb-client wget
 RUN apt-get install -y php-fpm php-mysql 
 RUN wget https://fr.wordpress.org/latest-fr_FR.tar.gz
 RUN tar -zxvf latest-fr_FR.tar.gz
